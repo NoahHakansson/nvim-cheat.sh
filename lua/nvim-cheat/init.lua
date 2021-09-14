@@ -40,6 +40,7 @@ local function createFloatingWindow()
   opts.row = math.ceil((editorHeight - opts.height) /2 - 1)
   opts.col = math.ceil((editorWidth - opts.width) /2)
   local win_buf = floating_win.create_win(opts)
+  api.nvim_buf_set_keymap(win_buf.buf, 'n', 'q', '<cmd>lua vim.api.nvim_win_close(' .. win_buf.win ..', true)<CR>', {noremap=true, silent=true})
   api.nvim_buf_set_option(win_buf.buf, 'bufhidden', 'wipe')
   api.nvim_win_set_option(win_buf.win, 'winhl', 'Normal:Normal')
   api.nvim_win_set_option(win_buf.win, 'number', true)
@@ -233,13 +234,16 @@ local function setupResultWindow(self, init_text, disable_comment)
   local keymap = {
     i = {
       ['<CR>'] = defaultFunc,
-    }
+    },
   }
   mapping.add_keymap(popup.prompt.buffer, keymap, popup)
 end
 
-function M:new_cheat(disable_comment, init_text)
+function M:new_cheat(disable_comment, init_text, filetype)
   local obj = {}
+  if filetype ~= nil and filetype then
+	  init_text = vim.bo.filetype .. ' ' .. init_text
+  end
   obj.currentHistoryIndex = historySize + 1
   setmetatable(obj, self)
   setupResultWindow(obj, init_text, disable_comment)
