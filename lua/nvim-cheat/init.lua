@@ -92,9 +92,9 @@ local function openCheat(self, line, disable_comment)
     on_exit = function()
       self.job = nil
       vim.schedule(function()
-        vim.cmd('echohl MoreMsg')
-        vim.cmd(string.format([[echomsg '%s']],'Finished!!!'))
-        vim.cmd('echohl None')
+        -- vim.cmd('echohl MoreMsg')
+        -- vim.cmd(string.format([[echomsg '%s']],'Finished!!!'))
+        -- vim.cmd('echohl None')
       end)
     end,
   }
